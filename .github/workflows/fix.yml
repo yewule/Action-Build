@@ -1,4 +1,4 @@
-name: Build All OnePlus Kernels
+name: fix
 on:
   workflow_dispatch:
     inputs:
@@ -93,7 +93,7 @@ on:
         type: string
         description: "回退SUSFS(输入哈希或次数或-1关闭)"
         required: false
-        default: "c49b1dab205bbc4ef20b120e84c5b7530355961d"
+        default: ""
       DYNAMIC_REPO:
         type: string
         description: "动态清单仓库所有者"
@@ -108,7 +108,7 @@ on:
         type: string
         description: "分支名(必填)/自定义版本标识(留空不修改)/回退分支提交哈希版本(留空不修改)"
         required: false
-        default: "builtin//0d27e68"
+        default: "builtin//a4a9df3"
       ZRAM:
         type: string
         description: "ZRAM(0关闭1开启)/算法名/大小"
