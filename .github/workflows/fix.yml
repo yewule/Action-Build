@@ -1,4 +1,4 @@
-name: fix
+name: Build All OnePlus Kernels
 on:
   workflow_dispatch:
     inputs:
@@ -462,7 +462,22 @@ jobs:
 
       - name: Install Repo Tool
         run: |
-          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/repo
+          install_repo() {
+            local url=$1
+            curl --retry 3 --retry-delay 5 --connect-timeout 30 -s "$url" > ~/repo
+            return $?
+          }
+          
+          echo "正在下载 repo 工具..."
+          if ! install_repo "https://storage.googleapis.com/git-repo-downloads/repo"; then
+            echo "Google 源下载失败，尝试 GitHub 镜像..."
+            if ! install_repo "https://raw.githubusercontent.com/GerritCodeReview/git-repo/main/repo"; then
+              echo "GitHub raw 镜像下载失败，尝试 GitHub git 协议..."
+              git clone --depth 1 https://github.com/GerritCodeReview/git-repo.git /tmp/git-repo-tmp
+              cp /tmp/git-repo-tmp/repo ~/repo
+              rm -rf /tmp/git-repo-tmp
+            fi
+          fi
           chmod a+x ~/repo
           sudo mv ~/repo /usr/local/bin/repo
 
